@@ -3,248 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfume Production Calculator - Custom Bottle Cost</title>
+    <title>Perfume Cost Calculator</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h1 class="text-2xl font-bold mb-6 text-center text-gray-800">Perfume Production Calculator</h1>
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
+        <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">Perfume Cost Calculator</h1>
 
-        <div class="mb-4">
-            <label for="totalPatiMl" class="block text-gray-700 text-sm font-semibold mb-2">Total Pati (Concentrate) available (ml):</label>
-            <input type="number" id="totalPatiMl" min="0" value="1000" step="10"
-                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div>
+                <h2 class="text-xl font-semibold mb-4 text-gray-700">Ingredient Costs</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label for="oilQtyPurchased" class="block text-sm font-medium text-gray-700">Perfume Oil Quantity Purchased (ml):</label>
+                        <input type="number" id="oilQtyPurchased" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="500">
+                        <label for="oilCost" class="block text-sm font-medium text-gray-700 mt-2">Perfume Oil Cost ($):</label>
+                        <input type="number" id="oilCost" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="100">
+                    </div>
+                    <div>
+                        <label for="fixativeQtyPurchased" class="block text-sm font-medium text-gray-700">Fixative Quantity Purchased (ml):</label>
+                        <input type="number" id="fixativeQtyPurchased" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="100">
+                        <label for="fixativeCost" class="block text-sm font-medium text-gray-700 mt-2">Fixative Cost ($):</label>
+                        <input type="number" id="fixativeCost" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="20">
+                    </div>
+                    <div>
+                        <label for="alcoholQtyPurchased" class="block text-sm font-medium text-gray-700">Alcohol Base Quantity Purchased (ml):</label>
+                        <input type="number" id="alcoholQtyPurchased" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="1000">
+                        <label for="alcoholCost" class="block text-sm font-medium text-gray-700 mt-2">Alcohol Base Cost ($):</label>
+                        <input type="number" id="alcoholCost" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="50">
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h2 class="text-xl font-semibold mb-4 text-gray-700">Bottle & Desired Output</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label for="bottleQtyPurchased" class="block text-sm font-medium text-gray-700">Total Bottle Quantity Purchased (units):</label>
+                        <input type="number" id="bottleQtyPurchased" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="20">
+                        <label for="bottleCost" class="block text-sm font-medium text-gray-700 mt-2">Total Bottle Cost ($):</label>
+                        <input type="number" id="bottleCost" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="30">
+                    </div>
+                    <div>
+                        <label for="desiredFinalQty" class="block text-sm font-medium text-gray-700">Desired Final Perfume Quantity (ml):</label>
+                        <input type="number" id="desiredFinalQty" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="50">
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="mb-4">
-            <label for="totalBaseMl" class="block text-gray-700 text-sm font-semibold mb-2">Total Base available (ml):</label>
-            <input type="number" id="totalBaseMl" min="0" value="1500" step="10"
-                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        <button onclick="calculateCost()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+            Calculate Cost Per Bottle
+        </button>
+
+        <div id="results" class="mt-8 p-6 bg-blue-50 border border-blue-200 rounded-lg hidden">
+            <h2 class="text-xl font-semibold mb-3 text-blue-800">Calculation Results</h2>
+            <p class="text-lg text-blue-700">Cost per ml of Perfume Oil: <span id="unitOilCost" class="font-medium"></span></p>
+            <p class="text-lg text-blue-700">Cost per ml of Fixative: <span id="unitFixativeCost" class="font-medium"></span></p>
+            <p class="text-lg text-blue-700">Cost per ml of Alcohol Base: <span id="unitAlcoholCost" class="font-medium"></span></p>
+            <p class="text-lg text-blue-700">Cost per Empty Bottle: <span id="unitBottleCost" class="font-medium"></span></p>
+            <hr class="my-4 border-blue-200">
+            <p class="text-lg text-blue-700">Perfume Oil needed per bottle: <span id="oilNeeded" class="font-medium"></span></p>
+            <p class="text-lg text-blue-700">Fixative needed per bottle: <span id="fixativeNeeded" class="font-medium"></span></p>
+            <p class="text-lg text-blue-700">Alcohol Base needed per bottle: <span id="alcoholNeeded" class="font-medium"></span></p>
+            <hr class="my-4 border-blue-200">
+            <p class="text-lg text-blue-700">Cost of Perfume Oil per bottle: <span id="oilCostPerBottle" class="font-medium"></span></p>
+            <p class="text-lg text-blue-700">Cost of Fixative per bottle: <span id="fixativeCostPerBottle" class="font-medium"></span></p>
+            <p class="text-lg text-blue-700">Cost of Alcohol Base per bottle: <span id="alcoholCostPerBottle" class="font-medium"></span></p>
+            <hr class="my-4 border-blue-200">
+            <p class="text-2xl font-bold text-blue-900">Total Cost Per Filled Bottle: <span id="totalCostPerBottle"></span></p>
         </div>
 
-        <div class="mb-4">
-            <label for="bottleVolumeMl" class="block text-gray-700 text-sm font-semibold mb-2">Desired Bottle Volume (ml):</label>
-            <input type="number" id="bottleVolumeMl" min="1" value="30" step="1"
-                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-        </div>
-
-        <div class="mb-4">
-            <label for="patiRatio" class="block text-gray-700 text-sm font-semibold mb-2">Pati Ratio per Bottle (%):</label>
-            <input type="number" id="patiRatio" min="1" max="99" value="40" step="1"
-                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-            <p class="text-xs text-gray-500 mt-1">e.g., 40 for 40% Pati, 60% Base</p>
-        </div>
-
-        <div class="mb-4">
-            <label for="bottleCost" class="block text-gray-700 text-sm font-semibold mb-2">Cost per Empty Bottle (RM):</label>
-            <input type="number" id="bottleCost" min="0" value="3.00" step="0.01"
-                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-        </div>
-
-        <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-semibold mb-2">
-                <input type="checkbox" id="includePrinting" class="mr-2 leading-tight">
-                Include Printing (One-time RM100 + per bottle cost)
-            </label>
-        </div>
-
-        <div class="mb-6">
-            <button id="calculateBtn"
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
-                Calculate
-            </button>
-        </div>
-
-        <div id="results" class="bg-gray-50 p-4 rounded-md">
-            <h2 class="text-xl font-semibold mb-3 text-gray-800">Calculation Results:</h2>
-            <p class="text-gray-700 mb-1"><span class="font-medium">Pati needed per bottle:</span> <span id="patiNeededPerBottle">0.00</span> ml</p>
-            <p class="text-gray-700 mb-1"><span class="font-medium">Base needed per bottle:</span> <span id="baseNeededPerBottle">0.00</span> ml</p>
-            <hr class="my-3">
-            <p class="text-lg font-bold text-gray-800">Max Bottles That Can Be Made: <span id="maxBottles">0</span></p>
-            <hr class="my-3">
-            <p class="text-gray-700 mb-1"><span class="font-medium">Total Ingredient Cost:</span> RM <span id="totalIngredientCost">0.00</span></p>
-            <p class="text-gray-700 mb-1"><span class="font-medium">Total Bottle Cost:</span> RM <span id="totalBottleCost">0.00</span></p>
-            <p class="text-gray-700 mb-1"><span class="font-medium">Total Filling Cost:</span> RM <span id="totalFillingCost">0.00</span></p>
-            <p class="text-gray-700 mb-1" id="printingBookingBlockRow" style="display: none;"><span class="font-medium">Printing Booking Block:</span> RM <span id="printingBookingBlock">0.00</span></p>
-            <p class="text-gray-700 mb-1" id="perBottlePrintingCostRow" style="display: none;"><span class="font-medium">Per Bottle Printing Cost:</span> RM <span id="perBottlePrintingCost">0.00</span></p>
-            <hr class="my-3">
-            <p class="text-lg font-bold text-gray-800">Grand Total Cost: RM <span id="grandTotal">0.00</span></p>
-            <p class="text-md font-bold text-gray-800">Cost Per Bottle: RM <span id="costPerBottle">0.00</span></p>
+        <div id="error" class="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg hidden" role="alert">
+            Please fill in all fields with valid positive numbers.
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const totalPatiMlInput = document.getElementById('totalPatiMl');
-            const totalBaseMlInput = document.getElementById('totalBaseMl');
-            const bottleVolumeMlInput = document.getElementById('bottleVolumeMl');
-            const patiRatioInput = document.getElementById('patiRatio');
-            const bottleCostInput = document.getElementById('bottleCost'); // New input for bottle cost
-            const includePrintingCheckbox = document.getElementById('includePrinting');
-            const calculateBtn = document.getElementById('calculateBtn');
+        function calculateCost() {
+            // Get input values
+            const oilQtyPurchased = parseFloat(document.getElementById('oilQtyPurchased').value);
+            const oilCost = parseFloat(document.getElementById('oilCost').value);
+            const fixativeQtyPurchased = parseFloat(document.getElementById('fixativeQtyPurchased').value);
+            const fixativeCost = parseFloat(document.getElementById('fixativeCost').value);
+            const alcoholQtyPurchased = parseFloat(document.getElementById('alcoholQtyPurchased').value);
+            const alcoholCost = parseFloat(document.getElementById('alcoholCost').value);
+            const bottleQtyPurchased = parseFloat(document.getElementById('bottleQtyPurchased').value);
+            const bottleCost = parseFloat(document.getElementById('bottleCost').value);
+            const desiredFinalQty = parseFloat(document.getElementById('desiredFinalQty').value);
 
-            const patiNeededPerBottleSpan = document.getElementById('patiNeededPerBottle');
-            const baseNeededPerBottleSpan = document.getElementById('baseNeededPerBottle');
-            const maxBottlesSpan = document.getElementById('maxBottles');
-            const totalIngredientCostSpan = document.getElementById('totalIngredientCost');
-            const totalBottleCostSpan = document.getElementById('totalBottleCost');
-            const totalFillingCostSpan = document.getElementById('totalFillingCost');
-            const printingBookingBlockSpan = document.getElementById('printingBookingBlock');
-            const perBottlePrintingCostSpan = document.getElementById('perBottlePrintingCost');
-            const grandTotalSpan = document.getElementById('grandTotal');
-            const costPerBottleSpan = document.getElementById('costPerBottle');
-
-            const printingBookingBlockRow = document.getElementById('printingBookingBlockRow');
-            const perBottlePrintingCostRow = document.getElementById('perBottlePrintingCostRow');
-
-            // Constants from the image (Cost per ml of raw materials, fixed fees)
-            const PATI_COST_PER_ML = 0.28; // RM280 / 1000ml
-            const BASE_COST_PER_ML = 0.05; // RM75 / 1500ml
-            // BOTTLE_PRICE is now user input
-            const FILLING_CHARGE_PER_BOTTLE = 0.50; // RM0.50 per piece
-            const PRINTING_BOOKING_BLOCK_FEE = 100.00; // RM100 one-time
-
-            const PRINTING_COST_BELOW_100 = 1.00; // RM1 per piece
-            const PRINTING_COST_ABOVE_200 = 0.60; // RM0.60 per piece
-
-            function calculateYieldAndCosts() {
-                const totalPatiMlAvailable = parseFloat(totalPatiMlInput.value);
-                const totalBaseMlAvailable = parseFloat(totalBaseMlInput.value);
-                const bottleVolumeMl = parseFloat(bottleVolumeMlInput.value);
-                const patiRatioPercent = parseFloat(patiRatioInput.value);
-                const bottleCost = parseFloat(bottleCostInput.value); // Get the user-defined bottle cost
-                const includePrinting = includePrintingCheckbox.checked;
-
-                // Input validation
-                if (isNaN(totalPatiMlAvailable) || totalPatiMlAvailable < 0 ||
-                    isNaN(totalBaseMlAvailable) || totalBaseMlAvailable < 0 ||
-                    isNaN(bottleVolumeMl) || bottleVolumeMl <= 0 ||
-                    isNaN(patiRatioPercent) || patiRatioPercent <= 0 || patiRatioPercent >= 100 ||
-                    isNaN(bottleCost) || bottleCost < 0) { // Validate bottleCost
-                    alert('Please enter valid, non-negative numbers for all inputs. Pati ratio must be between 1 and 99.');
-                    // Reset results to 0 or empty for clarity
-                    patiNeededPerBottleSpan.textContent = '0.00';
-                    baseNeededPerBottleSpan.textContent = '0.00';
-                    maxBottlesSpan.textContent = '0';
-                    totalIngredientCostSpan.textContent = '0.00';
-                    totalBottleCostSpan.textContent = '0.00';
-                    totalFillingCostSpan.textContent = '0.00';
-                    printingBookingBlockSpan.textContent = '0.00';
-                    perBottlePrintingCostSpan.textContent = '0.00';
-                    grandTotalSpan.textContent = '0.00';
-                    costPerBottleSpan.textContent = '0.00';
-                    printingBookingBlockRow.style.display = 'none';
-                    perBottlePrintingCostRow.style.display = 'none';
-                    return;
-                }
-
-                const patiRatioDecimal = patiRatioPercent / 100;
-                const baseRatioDecimal = 1 - patiRatioDecimal;
-
-                // 1. Calculate ingredients needed per user-defined volume bottle based on ratio
-                const patiMlPerBottleNeeded = bottleVolumeMl * patiRatioDecimal;
-                const baseMlPerBottleNeeded = bottleVolumeMl * baseRatioDecimal;
-
-                patiNeededPerBottleSpan.textContent = patiMlPerBottleNeeded.toFixed(2);
-                baseNeededPerBottleSpan.textContent = baseMlPerBottleNeeded.toFixed(2);
-
-                if (patiMlPerBottleNeeded === 0 || baseMlPerBottleNeeded === 0) {
-                     maxBottlesSpan.textContent = '0';
-                     alert("Pati or Base needed per bottle cannot be zero. Adjust your ratio or bottle volume.");
-                     return;
-                }
-
-                // 2. Calculate how many bottles can be made from available Pati
-                const bottlesFromPati = Math.floor(totalPatiMlAvailable / patiMlPerBottleNeeded);
-
-                // 3. Calculate how many bottles can be made from available Base
-                const bottlesFromBase = Math.floor(totalBaseMlAvailable / baseMlPerBottleNeeded);
-
-                // 4. The limiting factor is the minimum of these two
-                const numBottles = Math.min(bottlesFromPati, bottlesFromBase);
-                maxBottlesSpan.textContent = numBottles;
-
-                // If no bottles can be made, stop here and show 0 costs
-                if (numBottles <= 0) {
-                    totalIngredientCostSpan.textContent = '0.00';
-                    totalBottleCostSpan.textContent = '0.00';
-                    totalFillingCostSpan.textContent = '0.00';
-                    printingBookingBlockSpan.textContent = '0.00';
-                    perBottlePrintingCostSpan.textContent = '0.00';
-                    grandTotalSpan.textContent = '0.00';
-                    costPerBottleSpan.textContent = '0.00';
-                    printingBookingBlockRow.style.display = 'none';
-                    perBottlePrintingCostRow.style.display = 'none';
-                    return;
-                }
-
-                // --- Calculate Costs for the determined number of bottles ---
-
-                // Cost per bottle for ingredients
-                const ingredientCostPerBottleUnit =
-                    (patiMlPerBottleNeeded * PATI_COST_PER_ML) +
-                    (baseMlPerBottleNeeded * BASE_COST_PER_ML);
-
-                // Total Ingredient Cost
-                const totalIngredientCost = ingredientCostPerBottleUnit * numBottles;
-
-                // Total Bottle Cost (now uses user-defined bottleCost)
-                const totalBottleCost = bottleCost * numBottles;
-
-                // Total Filling Cost
-                const totalFillingCost = FILLING_CHARGE_PER_BOTTLE * numBottles;
-
-                // Total Printing Cost
-                let totalPrintingCost = 0;
-                let currentPrintingBookingBlock = 0;
-                let currentPerBottlePrintingCost = 0;
-
-                if (includePrinting) {
-                    currentPrintingBookingBlock = PRINTING_BOOKING_BLOCK_FEE;
-                    if (numBottles < 100) {
-                        currentPerBottlePrintingCost = PRINTING_COST_BELOW_100 * numBottles;
-                    } else if (numBottles >= 200) {
-                        currentPerBottlePrintingCost = PRINTING_COST_ABOVE_200 * numBottles;
-                    } else { // Between 100 and 199, assuming RM1.00 as per previous logic.
-                        currentPerBottlePrintingCost = PRINTING_COST_BELOW_100 * numBottles;
-                    }
-                    totalPrintingCost = currentPrintingBookingBlock + currentPerBottlePrintingCost;
-
-                    printingBookingBlockRow.style.display = 'block';
-                    perBottlePrintingCostRow.style.display = 'block';
-                } else {
-                    printingBookingBlockRow.style.display = 'none';
-                    perBottlePrintingCostRow.style.display = 'none';
-                }
-
-                // Grand Total
-                const grandTotal = totalIngredientCost + totalBottleCost + totalFillingCost + totalPrintingCost;
-
-                // Cost Per Bottle
-                const costPerBottle = grandTotal / numBottles;
-
-                // Update results in the HTML
-                totalIngredientCostSpan.textContent = totalIngredientCost.toFixed(2);
-                totalBottleCostSpan.textContent = totalBottleCost.toFixed(2);
-                totalFillingCostSpan.textContent = totalFillingCost.toFixed(2);
-                printingBookingBlockSpan.textContent = currentPrintingBookingBlock.toFixed(2);
-                perBottlePrintingCostSpan.textContent = currentPerBottlePrintingCost.toFixed(2);
-                grandTotalSpan.textContent = grandTotal.toFixed(2);
-                costPerBottleSpan.textContent = costPerBottle.toFixed(2);
+            // Validate inputs
+            if (isNaN(oilQtyPurchased) || isNaN(oilCost) || isNaN(fixativeQtyPurchased) || isNaN(fixativeCost) ||
+                isNaN(alcoholQtyPurchased) || isNaN(alcoholCost) || isNaN(bottleQtyPurchased) || isNaN(bottleCost) ||
+                isNaN(desiredFinalQty) ||
+                oilQtyPurchased <= 0 || oilCost < 0 || fixativeQtyPurchased <= 0 || fixativeCost < 0 ||
+                alcoholQtyPurchased <= 0 || alcoholCost < 0 || bottleQtyPurchased <= 0 || bottleCost < 0 ||
+                desiredFinalQty <= 0) {
+                document.getElementById('error').classList.remove('hidden');
+                document.getElementById('results').classList.add('hidden');
+                return;
+            } else {
+                document.getElementById('error').classList.add('hidden');
             }
 
-            // Initial calculation on page load
-            calculateYieldAndCosts();
+            // Define ratios
+            const perfumeOilRatio = 0.38; // 38%
+            const fixativeRatio = 0.02;   // 2%
+            const alcoholBaseRatio = 0.60; // 60%
 
-            // Event listeners for changes on all input fields
-            totalPatiMlInput.addEventListener('input', calculateYieldAndCosts);
-            totalBaseMlInput.addEventListener('input', calculateYieldAndCosts);
-            bottleVolumeMlInput.addEventListener('input', calculateYieldAndCosts);
-            patiRatioInput.addEventListener('input', calculateYieldAndCosts);
-            bottleCostInput.addEventListener('input', calculateYieldAndCosts); // New listener for bottle cost
-            includePrintingCheckbox.addEventListener('change', calculateYieldAndCosts);
-            calculateBtn.addEventListener('click', calculateYieldAndCosts);
-        });
+            // Step 1: Calculate the Unit Cost of Each Raw Ingredient
+            const unitOilCost = oilCost / oilQtyPurchased;
+            const unitFixativeCost = fixativeCost / fixativeQtyPurchased;
+            const unitAlcoholCost = alcoholCost / alcoholQtyPurchased;
+            const unitBottleCost = bottleCost / bottleQtyPurchased;
+
+            // Step 2: Calculate the Quantity of Each Ingredient Needed for ONE Desired Final Perfume Bottle
+            const oilNeeded = desiredFinalQty * perfumeOilRatio;
+            const fixativeNeeded = desiredFinalQty * fixativeRatio;
+            const alcoholNeeded = desiredFinalQty * alcoholBaseRatio;
+
+            // Step 3: Calculate the Raw Material Cost for ONE Desired Final Perfume Bottle
+            const oilCostPerBottle = oilNeeded * unitOilCost;
+            const fixativeCostPerBottle = fixativeNeeded * unitFixativeCost;
+            const alcoholCostPerBottle = alcoholNeeded * unitAlcoholCost;
+
+            // Step 4: Calculate the Total Cost Per Filled Bottle
+            const totalCostPerBottle = oilCostPerBottle + fixativeCostPerBottle + alcoholCostPerBottle + unitBottleCost;
+
+            // Display results
+            document.getElementById('unitOilCost').textContent = `$${unitOilCost.toFixed(4)}`;
+            document.getElementById('unitFixativeCost').textContent = `$${unitFixativeCost.toFixed(4)}`;
+            document.getElementById('unitAlcoholCost').textContent = `$${unitAlcoholCost.toFixed(4)}`;
+            document.getElementById('unitBottleCost').textContent = `$${unitBottleCost.toFixed(2)}`;
+
+            document.getElementById('oilNeeded').textContent = `${oilNeeded.toFixed(2)} ml`;
+            document.getElementById('fixativeNeeded').textContent = `${fixativeNeeded.toFixed(2)} ml`;
+            document.getElementById('alcoholNeeded').textContent = `${alcoholNeeded.toFixed(2)} ml`;
+
+            document.getElementById('oilCostPerBottle').textContent = `$${oilCostPerBottle.toFixed(2)}`;
+            document.getElementById('fixativeCostPerBottle').textContent = `$${fixativeCostPerBottle.toFixed(2)}`;
+            document.getElementById('alcoholCostPerBottle').textContent = `$${alcoholCostPerBottle.toFixed(2)}`;
+
+            document.getElementById('totalCostPerBottle').textContent = `$${totalCostPerBottle.toFixed(2)}`;
+
+            document.getElementById('results').classList.remove('hidden');
+        }
     </script>
 </body>
 </html>
