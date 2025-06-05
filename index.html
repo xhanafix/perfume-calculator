@@ -3,16 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfume Calculator</title>
+    <title>Perfume Production Calculator - Custom Bottle Cost</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h1 class="text-2xl font-bold mb-6 text-center text-gray-800">Perfume Cost Calculator</h1>
+        <h1 class="text-2xl font-bold mb-6 text-center text-gray-800">Perfume Production Calculator</h1>
 
         <div class="mb-4">
-            <label for="numBottles" class="block text-gray-700 text-sm font-semibold mb-2">Number of 30ml Bottles:</label>
-            <input type="number" id="numBottles" min="1" value="1"
+            <label for="totalPatiMl" class="block text-gray-700 text-sm font-semibold mb-2">Total Pati (Concentrate) available (ml):</label>
+            <input type="number" id="totalPatiMl" min="0" value="1000" step="10"
+                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+
+        <div class="mb-4">
+            <label for="totalBaseMl" class="block text-gray-700 text-sm font-semibold mb-2">Total Base available (ml):</label>
+            <input type="number" id="totalBaseMl" min="0" value="1500" step="10"
+                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+
+        <div class="mb-4">
+            <label for="bottleVolumeMl" class="block text-gray-700 text-sm font-semibold mb-2">Desired Bottle Volume (ml):</label>
+            <input type="number" id="bottleVolumeMl" min="1" value="30" step="1"
+                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+
+        <div class="mb-4">
+            <label for="patiRatio" class="block text-gray-700 text-sm font-semibold mb-2">Pati Ratio per Bottle (%):</label>
+            <input type="number" id="patiRatio" min="1" max="99" value="40" step="1"
+                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            <p class="text-xs text-gray-500 mt-1">e.g., 40 for 40% Pati, 60% Base</p>
+        </div>
+
+        <div class="mb-4">
+            <label for="bottleCost" class="block text-gray-700 text-sm font-semibold mb-2">Cost per Empty Bottle (RM):</label>
+            <input type="number" id="bottleCost" min="0" value="3.00" step="0.01"
                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
         </div>
 
@@ -32,23 +57,35 @@
 
         <div id="results" class="bg-gray-50 p-4 rounded-md">
             <h2 class="text-xl font-semibold mb-3 text-gray-800">Calculation Results:</h2>
+            <p class="text-gray-700 mb-1"><span class="font-medium">Pati needed per bottle:</span> <span id="patiNeededPerBottle">0.00</span> ml</p>
+            <p class="text-gray-700 mb-1"><span class="font-medium">Base needed per bottle:</span> <span id="baseNeededPerBottle">0.00</span> ml</p>
+            <hr class="my-3">
+            <p class="text-lg font-bold text-gray-800">Max Bottles That Can Be Made: <span id="maxBottles">0</span></p>
+            <hr class="my-3">
             <p class="text-gray-700 mb-1"><span class="font-medium">Total Ingredient Cost:</span> RM <span id="totalIngredientCost">0.00</span></p>
             <p class="text-gray-700 mb-1"><span class="font-medium">Total Bottle Cost:</span> RM <span id="totalBottleCost">0.00</span></p>
             <p class="text-gray-700 mb-1"><span class="font-medium">Total Filling Cost:</span> RM <span id="totalFillingCost">0.00</span></p>
             <p class="text-gray-700 mb-1" id="printingBookingBlockRow" style="display: none;"><span class="font-medium">Printing Booking Block:</span> RM <span id="printingBookingBlock">0.00</span></p>
             <p class="text-gray-700 mb-1" id="perBottlePrintingCostRow" style="display: none;"><span class="font-medium">Per Bottle Printing Cost:</span> RM <span id="perBottlePrintingCost">0.00</span></p>
             <hr class="my-3">
-            <p class="text-lg font-bold text-gray-800">Grand Total: RM <span id="grandTotal">0.00</span></p>
+            <p class="text-lg font-bold text-gray-800">Grand Total Cost: RM <span id="grandTotal">0.00</span></p>
             <p class="text-md font-bold text-gray-800">Cost Per Bottle: RM <span id="costPerBottle">0.00</span></p>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const numBottlesInput = document.getElementById('numBottles');
+            const totalPatiMlInput = document.getElementById('totalPatiMl');
+            const totalBaseMlInput = document.getElementById('totalBaseMl');
+            const bottleVolumeMlInput = document.getElementById('bottleVolumeMl');
+            const patiRatioInput = document.getElementById('patiRatio');
+            const bottleCostInput = document.getElementById('bottleCost'); // New input for bottle cost
             const includePrintingCheckbox = document.getElementById('includePrinting');
             const calculateBtn = document.getElementById('calculateBtn');
 
+            const patiNeededPerBottleSpan = document.getElementById('patiNeededPerBottle');
+            const baseNeededPerBottleSpan = document.getElementById('baseNeededPerBottle');
+            const maxBottlesSpan = document.getElementById('maxBottles');
             const totalIngredientCostSpan = document.getElementById('totalIngredientCost');
             const totalBottleCostSpan = document.getElementById('totalBottleCost');
             const totalFillingCostSpan = document.getElementById('totalFillingCost');
@@ -60,43 +97,104 @@
             const printingBookingBlockRow = document.getElementById('printingBookingBlockRow');
             const perBottlePrintingCostRow = document.getElementById('perBottlePrintingCostRow');
 
-            // Constants from the image
+            // Constants from the image (Cost per ml of raw materials, fixed fees)
             const PATI_COST_PER_ML = 0.28; // RM280 / 1000ml
             const BASE_COST_PER_ML = 0.05; // RM75 / 1500ml
-            const BOTTLE_PRICE = 3.00; // RM3 per bottle
+            // BOTTLE_PRICE is now user input
             const FILLING_CHARGE_PER_BOTTLE = 0.50; // RM0.50 per piece
             const PRINTING_BOOKING_BLOCK_FEE = 100.00; // RM100 one-time
 
             const PRINTING_COST_BELOW_100 = 1.00; // RM1 per piece
             const PRINTING_COST_ABOVE_200 = 0.60; // RM0.60 per piece
 
-            const BOTTLE_VOLUME_ML = 30;
-            const PATI_PERCENTAGE = 0.40; // 40%
-
-            function calculateCosts() {
-                const numBottles = parseInt(numBottlesInput.value);
+            function calculateYieldAndCosts() {
+                const totalPatiMlAvailable = parseFloat(totalPatiMlInput.value);
+                const totalBaseMlAvailable = parseFloat(totalBaseMlInput.value);
+                const bottleVolumeMl = parseFloat(bottleVolumeMlInput.value);
+                const patiRatioPercent = parseFloat(patiRatioInput.value);
+                const bottleCost = parseFloat(bottleCostInput.value); // Get the user-defined bottle cost
                 const includePrinting = includePrintingCheckbox.checked;
 
-                if (isNaN(numBottles) || numBottles <= 0) {
-                    alert('Please enter a valid number of bottles (at least 1).');
+                // Input validation
+                if (isNaN(totalPatiMlAvailable) || totalPatiMlAvailable < 0 ||
+                    isNaN(totalBaseMlAvailable) || totalBaseMlAvailable < 0 ||
+                    isNaN(bottleVolumeMl) || bottleVolumeMl <= 0 ||
+                    isNaN(patiRatioPercent) || patiRatioPercent <= 0 || patiRatioPercent >= 100 ||
+                    isNaN(bottleCost) || bottleCost < 0) { // Validate bottleCost
+                    alert('Please enter valid, non-negative numbers for all inputs. Pati ratio must be between 1 and 99.');
+                    // Reset results to 0 or empty for clarity
+                    patiNeededPerBottleSpan.textContent = '0.00';
+                    baseNeededPerBottleSpan.textContent = '0.00';
+                    maxBottlesSpan.textContent = '0';
+                    totalIngredientCostSpan.textContent = '0.00';
+                    totalBottleCostSpan.textContent = '0.00';
+                    totalFillingCostSpan.textContent = '0.00';
+                    printingBookingBlockSpan.textContent = '0.00';
+                    perBottlePrintingCostSpan.textContent = '0.00';
+                    grandTotalSpan.textContent = '0.00';
+                    costPerBottleSpan.textContent = '0.00';
+                    printingBookingBlockRow.style.display = 'none';
+                    perBottlePrintingCostRow.style.display = 'none';
                     return;
                 }
 
-                // 1. Calculate Ingredient Cost
-                const patiMlPerBottle = BOTTLE_VOLUME_ML * PATI_PERCENTAGE;
-                const baseMlPerBottle = BOTTLE_VOLUME_ML * (1 - PATI_PERCENTAGE);
-                const ingredientCostPerBottle =
-                    (patiMlPerBottle * PATI_COST_PER_ML) +
-                    (baseMlPerBottle * BASE_COST_PER_ML);
-                const totalIngredientCost = ingredientCostPerBottle * numBottles;
+                const patiRatioDecimal = patiRatioPercent / 100;
+                const baseRatioDecimal = 1 - patiRatioDecimal;
 
-                // 2. Calculate Bottle Cost
-                const totalBottleCost = BOTTLE_PRICE * numBottles;
+                // 1. Calculate ingredients needed per user-defined volume bottle based on ratio
+                const patiMlPerBottleNeeded = bottleVolumeMl * patiRatioDecimal;
+                const baseMlPerBottleNeeded = bottleVolumeMl * baseRatioDecimal;
 
-                // 3. Calculate Filling Cost
+                patiNeededPerBottleSpan.textContent = patiMlPerBottleNeeded.toFixed(2);
+                baseNeededPerBottleSpan.textContent = baseMlPerBottleNeeded.toFixed(2);
+
+                if (patiMlPerBottleNeeded === 0 || baseMlPerBottleNeeded === 0) {
+                     maxBottlesSpan.textContent = '0';
+                     alert("Pati or Base needed per bottle cannot be zero. Adjust your ratio or bottle volume.");
+                     return;
+                }
+
+                // 2. Calculate how many bottles can be made from available Pati
+                const bottlesFromPati = Math.floor(totalPatiMlAvailable / patiMlPerBottleNeeded);
+
+                // 3. Calculate how many bottles can be made from available Base
+                const bottlesFromBase = Math.floor(totalBaseMlAvailable / baseMlPerBottleNeeded);
+
+                // 4. The limiting factor is the minimum of these two
+                const numBottles = Math.min(bottlesFromPati, bottlesFromBase);
+                maxBottlesSpan.textContent = numBottles;
+
+                // If no bottles can be made, stop here and show 0 costs
+                if (numBottles <= 0) {
+                    totalIngredientCostSpan.textContent = '0.00';
+                    totalBottleCostSpan.textContent = '0.00';
+                    totalFillingCostSpan.textContent = '0.00';
+                    printingBookingBlockSpan.textContent = '0.00';
+                    perBottlePrintingCostSpan.textContent = '0.00';
+                    grandTotalSpan.textContent = '0.00';
+                    costPerBottleSpan.textContent = '0.00';
+                    printingBookingBlockRow.style.display = 'none';
+                    perBottlePrintingCostRow.style.display = 'none';
+                    return;
+                }
+
+                // --- Calculate Costs for the determined number of bottles ---
+
+                // Cost per bottle for ingredients
+                const ingredientCostPerBottleUnit =
+                    (patiMlPerBottleNeeded * PATI_COST_PER_ML) +
+                    (baseMlPerBottleNeeded * BASE_COST_PER_ML);
+
+                // Total Ingredient Cost
+                const totalIngredientCost = ingredientCostPerBottleUnit * numBottles;
+
+                // Total Bottle Cost (now uses user-defined bottleCost)
+                const totalBottleCost = bottleCost * numBottles;
+
+                // Total Filling Cost
                 const totalFillingCost = FILLING_CHARGE_PER_BOTTLE * numBottles;
 
-                // 4. Calculate Printing Cost
+                // Total Printing Cost
                 let totalPrintingCost = 0;
                 let currentPrintingBookingBlock = 0;
                 let currentPerBottlePrintingCost = 0;
@@ -105,9 +203,9 @@
                     currentPrintingBookingBlock = PRINTING_BOOKING_BLOCK_FEE;
                     if (numBottles < 100) {
                         currentPerBottlePrintingCost = PRINTING_COST_BELOW_100 * numBottles;
-                    } else if (numBottles >= 200) { // Assuming "above 200pcs" means 200 and more. Image says "atas"
+                    } else if (numBottles >= 200) {
                         currentPerBottlePrintingCost = PRINTING_COST_ABOVE_200 * numBottles;
-                    } else { // Between 100 and 199, the image doesn't specify. Assuming 100-199 also uses the 1.00 rate for simplicity as it's "below 100" and "above 200". If there's another rate for 100-199, it needs to be clarified. For now, we'll keep it at RM1.00 for 100-199 pieces.
+                    } else { // Between 100 and 199, assuming RM1.00 as per previous logic.
                         currentPerBottlePrintingCost = PRINTING_COST_BELOW_100 * numBottles;
                     }
                     totalPrintingCost = currentPrintingBookingBlock + currentPerBottlePrintingCost;
@@ -119,10 +217,10 @@
                     perBottlePrintingCostRow.style.display = 'none';
                 }
 
-                // 5. Calculate Grand Total
+                // Grand Total
                 const grandTotal = totalIngredientCost + totalBottleCost + totalFillingCost + totalPrintingCost;
 
-                // 6. Calculate Cost Per Bottle
+                // Cost Per Bottle
                 const costPerBottle = grandTotal / numBottles;
 
                 // Update results in the HTML
@@ -136,12 +234,16 @@
             }
 
             // Initial calculation on page load
-            calculateCosts();
+            calculateYieldAndCosts();
 
-            // Event listeners for changes
-            numBottlesInput.addEventListener('input', calculateCosts);
-            includePrintingCheckbox.addEventListener('change', calculateCosts);
-            calculateBtn.addEventListener('click', calculateCosts);
+            // Event listeners for changes on all input fields
+            totalPatiMlInput.addEventListener('input', calculateYieldAndCosts);
+            totalBaseMlInput.addEventListener('input', calculateYieldAndCosts);
+            bottleVolumeMlInput.addEventListener('input', calculateYieldAndCosts);
+            patiRatioInput.addEventListener('input', calculateYieldAndCosts);
+            bottleCostInput.addEventListener('input', calculateYieldAndCosts); // New listener for bottle cost
+            includePrintingCheckbox.addEventListener('change', calculateYieldAndCosts);
+            calculateBtn.addEventListener('click', calculateYieldAndCosts);
         });
     </script>
 </body>
