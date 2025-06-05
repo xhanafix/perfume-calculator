@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfume Calculator</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h1 class="text-2xl font-bold mb-6 text-center text-gray-800">Perfume Cost Calculator</h1>
+
+        <div class="mb-4">
+            <label for="numBottles" class="block text-gray-700 text-sm font-semibold mb-2">Number of 30ml Bottles:</label>
+            <input type="number" id="numBottles" min="1" value="1"
+                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-semibold mb-2">
+                <input type="checkbox" id="includePrinting" class="mr-2 leading-tight">
+                Include Printing (One-time RM100 + per bottle cost)
+            </label>
+        </div>
+
+        <div class="mb-6">
+            <button id="calculateBtn"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
+                Calculate
+            </button>
+        </div>
+
+        <div id="results" class="bg-gray-50 p-4 rounded-md">
+            <h2 class="text-xl font-semibold mb-3 text-gray-800">Calculation Results:</h2>
+            <p class="text-gray-700 mb-1"><span class="font-medium">Total Ingredient Cost:</span> RM <span id="totalIngredientCost">0.00</span></p>
+            <p class="text-gray-700 mb-1"><span class="font-medium">Total Bottle Cost:</span> RM <span id="totalBottleCost">0.00</span></p>
+            <p class="text-gray-700 mb-1"><span class="font-medium">Total Filling Cost:</span> RM <span id="totalFillingCost">0.00</span></p>
+            <p class="text-gray-700 mb-1" id="printingBookingBlockRow" style="display: none;"><span class="font-medium">Printing Booking Block:</span> RM <span id="printingBookingBlock">0.00</span></p>
+            <p class="text-gray-700 mb-1" id="perBottlePrintingCostRow" style="display: none;"><span class="font-medium">Per Bottle Printing Cost:</span> RM <span id="perBottlePrintingCost">0.00</span></p>
+            <hr class="my-3">
+            <p class="text-lg font-bold text-gray-800">Grand Total: RM <span id="grandTotal">0.00</span></p>
+            <p class="text-md font-bold text-gray-800">Cost Per Bottle: RM <span id="costPerBottle">0.00</span></p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const numBottlesInput = document.getElementById('numBottles');
+            const includePrintingCheckbox = document.getElementById('includePrinting');
+            const calculateBtn = document.getElementById('calculateBtn');
+
+            const totalIngredientCostSpan = document.getElementById('totalIngredientCost');
+            const totalBottleCostSpan = document.getElementById('totalBottleCost');
+            const totalFillingCostSpan = document.getElementById('totalFillingCost');
+            const printingBookingBlockSpan = document.getElementById('printingBookingBlock');
+            const perBottlePrintingCostSpan = document.getElementById('perBottlePrintingCost');
+            const grandTotalSpan = document.getElementById('grandTotal');
+            const costPerBottleSpan = document.getElementById('costPerBottle');
+
+            const printingBookingBlockRow = document.getElementById('printingBookingBlockRow');
+            const perBottlePrintingCostRow = document.getElementById('perBottlePrintingCostRow');
+
+            // Constants from the image
+            const PATI_COST_PER_ML = 0.28; // RM280 / 1000ml
+            const BASE_COST_PER_ML = 0.05; // RM75 / 1500ml
+            const BOTTLE_PRICE = 3.00; // RM3 per bottle
+            const FILLING_CHARGE_PER_BOTTLE = 0.50; // RM0.50 per piece
+            const PRINTING_BOOKING_BLOCK_FEE = 100.00; // RM100 one-time
+
+            const PRINTING_COST_BELOW_100 = 1.00; // RM1 per piece
+            const PRINTING_COST_ABOVE_200 = 0.60; // RM0.60 per piece
+
+            const BOTTLE_VOLUME_ML = 30;
+            const PATI_PERCENTAGE = 0.40; // 40%
+
+            function calculateCosts() {
+                const numBottles = parseInt(numBottlesInput.value);
+                const includePrinting = includePrintingCheckbox.checked;
+
+                if (isNaN(numBottles) || numBottles <= 0) {
+                    alert('Please enter a valid number of bottles (at least 1).');
+                    return;
+                }
+
+                // 1. Calculate Ingredient Cost
+                const patiMlPerBottle = BOTTLE_VOLUME_ML * PATI_PERCENTAGE;
+                const baseMlPerBottle = BOTTLE_VOLUME_ML * (1 - PATI_PERCENTAGE);
+                const ingredientCostPerBottle =
+                    (patiMlPerBottle * PATI_COST_PER_ML) +
+                    (baseMlPerBottle * BASE_COST_PER_ML);
+                const totalIngredientCost = ingredientCostPerBottle * numBottles;
+
+                // 2. Calculate Bottle Cost
+                const totalBottleCost = BOTTLE_PRICE * numBottles;
+
+                // 3. Calculate Filling Cost
+                const totalFillingCost = FILLING_CHARGE_PER_BOTTLE * numBottles;
+
+                // 4. Calculate Printing Cost
+                let totalPrintingCost = 0;
+                let currentPrintingBookingBlock = 0;
+                let currentPerBottlePrintingCost = 0;
+
+                if (includePrinting) {
+                    currentPrintingBookingBlock = PRINTING_BOOKING_BLOCK_FEE;
+                    if (numBottles < 100) {
+                        currentPerBottlePrintingCost = PRINTING_COST_BELOW_100 * numBottles;
+                    } else if (numBottles >= 200) { // Assuming "above 200pcs" means 200 and more. Image says "atas"
+                        currentPerBottlePrintingCost = PRINTING_COST_ABOVE_200 * numBottles;
+                    } else { // Between 100 and 199, the image doesn't specify. Assuming 100-199 also uses the 1.00 rate for simplicity as it's "below 100" and "above 200". If there's another rate for 100-199, it needs to be clarified. For now, we'll keep it at RM1.00 for 100-199 pieces.
+                        currentPerBottlePrintingCost = PRINTING_COST_BELOW_100 * numBottles;
+                    }
+                    totalPrintingCost = currentPrintingBookingBlock + currentPerBottlePrintingCost;
+
+                    printingBookingBlockRow.style.display = 'block';
+                    perBottlePrintingCostRow.style.display = 'block';
+                } else {
+                    printingBookingBlockRow.style.display = 'none';
+                    perBottlePrintingCostRow.style.display = 'none';
+                }
+
+                // 5. Calculate Grand Total
+                const grandTotal = totalIngredientCost + totalBottleCost + totalFillingCost + totalPrintingCost;
+
+                // 6. Calculate Cost Per Bottle
+                const costPerBottle = grandTotal / numBottles;
+
+                // Update results in the HTML
+                totalIngredientCostSpan.textContent = totalIngredientCost.toFixed(2);
+                totalBottleCostSpan.textContent = totalBottleCost.toFixed(2);
+                totalFillingCostSpan.textContent = totalFillingCost.toFixed(2);
+                printingBookingBlockSpan.textContent = currentPrintingBookingBlock.toFixed(2);
+                perBottlePrintingCostSpan.textContent = currentPerBottlePrintingCost.toFixed(2);
+                grandTotalSpan.textContent = grandTotal.toFixed(2);
+                costPerBottleSpan.textContent = costPerBottle.toFixed(2);
+            }
+
+            // Initial calculation on page load
+            calculateCosts();
+
+            // Event listeners for changes
+            numBottlesInput.addEventListener('input', calculateCosts);
+            includePrintingCheckbox.addEventListener('change', calculateCosts);
+            calculateBtn.addEventListener('click', calculateCosts);
+        });
+    </script>
+</body>
+</html>
