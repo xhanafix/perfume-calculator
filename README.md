@@ -1,56 +1,49 @@
-# Perfume Cost Calculator
+Perfume Cost & Yield Calculator
+A simple, intuitive, and powerful web-based tool for perfume hobbyists and small-batch producers. This calculator demystifies the process of calculating production costs and potential yield based on the costs of your raw materials.
+This tool is built with vanilla HTML, JavaScript, and styled with Tailwind CSS, making it lightweight, fast, and easy to modify.
+➡️ View Live Demo (Link to your GitHub Pages or other deployment)
+✨ Features
+ * ✅ Detailed Cost Analysis: Calculates the final cost per bottle, incorporating the price of alcohol base, perfume oil, and the empty bottle itself.
+ * ✅ Production Yield Calculation: Instantly determines the maximum number of bottles you can produce based on your available raw materials, identifying the limiting ingredient.
+ * ✅ Dynamic Formula Breakdown: Shows the exact formulas and values used for the calculations, providing transparency and helping you understand the numbers.
+ * ✅ Fixed Ratio Logic: Uses a standard 60% alcohol base to 40% perfume oil ratio, which can be easily customized in the code.
+ * ✅ Modern & Responsive UI: Clean, user-friendly interface built with Tailwind CSS that works beautifully on both desktop and mobile devices.
+ * ✅ No Dependencies: Runs entirely in the browser with no need for external libraries or frameworks.
+🛠️ Technologies Used
+ * HTML5: For the structure and content.
+ * Tailwind CSS: For all styling and responsive design, loaded via a CDN.
+ * JavaScript (ES6): For all the calculation logic and DOM manipulation.
+🚀 Getting Started
+There are two easy ways to get this project running on your local machine.
+Method 1: Simple Download
+ * Download the repository as a ZIP file and extract it.
+ * Simply open the index.html file in your favorite web browser.
+Method 2: For Developers (Using Git)
+ * Clone the repository to your local machine:
+   git clone https://github.com/your-github-username/your-repo-name.git
 
-This project provides a simple, web-based calculator to estimate the cost per bottle of perfume based on your ingredient costs, bottle costs, and desired final volume. It uses a predefined perfume formula ratio for accurate calculations.
+ * Navigate into the project directory:
+   cd your-repo-name
 
----
+ * Open the index.html file in your browser.
+⚙️ Configuration
+Customizing the Perfume Ratio
+The core logic of the calculator is based on a 60/40 ratio (60% alcohol base, 40% perfume oil). If you use a different ratio (e.g., 70/30), you can easily change it.
+ * Open the index.html file.
+ * Scroll down to the <script> tag at the bottom.
+ * Find these two lines in the // --- ===== COST CALCULATION ===== --- section:
+   const baseAmountInFinal = finalQuantity * 0.60; // <-- Change this value
+const oilAmountInFinal = finalQuantity * 0.40;  // <-- Change this value
 
-## Features
-
-* **Ingredient Cost Calculation:** Determine the unit cost (per ml) for your perfume oil, fixative, and alcohol base.
-* **Bottle Cost Integration:** Includes the cost of the empty perfume bottles in the final calculation.
-* **Customizable Output Volume:** Calculate costs for different desired final perfume quantities (e.g., 10ml, 50ml, 100ml).
-* **Detailed Cost Breakdown:** Shows intermediate costs for each ingredient per bottle, along with the total cost.
-* **User-Friendly Interface:** Built with a clean design using Tailwind CSS.
-* **Input Validation:** Ensures all necessary fields are filled with valid positive numbers to prevent errors.
-
----
-
-## Perfume Formula Ratios Used
-
-This calculator is pre-configured with the following perfume liquid ratios:
-
-* **Perfume Oil Essence:** 38%
-* **Fixative:** 2%
-* **Alcohol Base:** 60%
-
----
-
-## How to Use
-
-To use this calculator, follow these simple steps:
-
-1.  **Save the Code:** Copy the entire HTML code (which includes the JavaScript and links to Tailwind CSS CDN) into a new text file.
-2.  **Name the File:** Save the file with an `.html` extension (e.g., `perfume_calculator.html`).
-3.  **Open in Browser:** Navigate to the saved file on your computer and open it with your preferred web browser.
-4.  **Input Your Data:** Fill in the fields for your ingredient quantities and costs, total bottle quantities and costs, and your desired final perfume volume per bottle.
-5.  **Calculate:** Click the "Calculate Cost Per Bottle" button to see the detailed cost breakdown and the total cost per filled bottle.
-
----
-
-## Technologies Used
-
-* **HTML5:** For the structure of the web page.
-* **JavaScript:** For the calculation logic and dynamic content updates.
-* **Tailwind CSS:** For styling the user interface.
-
----
-
-## Contribution
-
-Feel free to fork this repository, suggest improvements, or open issues. Any contributions are welcome!
-
----
-
-## License
-
-This project is open-source and available under the MIT License. See the `LICENSE` file (if you choose to add one) for more details.
+ * Adjust the decimal values to match your desired ratio. Ensure they add up to 1.0 (e.g., 0.70 and 0.30 for a 70/30 split).
+ * Save the file, and the calculator will now use your custom ratio.
+🤝 How to Contribute
+Contributions, issues, and feature requests are welcome! Feel free to check the issues page.
+ * Fork the Project.
+ * Create your Feature Branch (git checkout -b feature/AmazingFeature).
+ * Commit your Changes (git commit -m 'Add some AmazingFeature').
+ * Push to the Branch (git push origin feature/AmazingFeature).
+ * Open a Pull Request.
+📄 License
+This project is licensed under the MIT License. See the LICENSE file for more details.
+Created with care in Bagan Serai, Perak.
