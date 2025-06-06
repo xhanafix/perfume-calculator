@@ -3,151 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfume Cost Calculator</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Advanced Perfume Cost & Yield Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* A little custom CSS for the fade-in effect */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-2xl">
-        <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">Perfume Cost Calculator</h1>
+<body class="bg-gray-200 flex items-center justify-center min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-xl w-full bg-white p-8 md:p-10 rounded-xl shadow-2xl border border-gray-200">
+        <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">Perfume Cost & Yield Calculator</h1>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div class="space-y-6">
             <div>
-                <h2 class="text-xl font-semibold mb-4 text-gray-700">Ingredient Costs</h2>
-                <div class="space-y-4">
-                    <div>
-                        <label for="oilQtyPurchased" class="block text-sm font-medium text-gray-700">Perfume Oil Quantity Purchased (ml):</label>
-                        <input type="number" id="oilQtyPurchased" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="500">
-                        <label for="oilCost" class="block text-sm font-medium text-gray-700 mt-2">Perfume Oil Cost ($):</label>
-                        <input type="number" id="oilCost" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="100">
+                <h2 class="text-xl font-semibold mb-4 text-gray-700 border-b pb-2">Step 1: Raw Materials</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                    <div class="space-y-4 p-4 bg-gray-50 rounded-lg">
+                         <h3 class="font-medium text-gray-600">Alcohol Base</h3>
+                         <div>
+                            <label for="base-quantity" class="block text-sm font-medium text-gray-600">Total Quantity (ml)</label>
+                            <input type="number" id="base-quantity" placeholder="e.g., 1000" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 sm:text-sm">
+                        </div>
+                        <div>
+                            <label for="base-price" class="block text-sm font-medium text-gray-600">Total Price ($)</label>
+                            <input type="number" id="base-price" placeholder="e.g., 50.00" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 sm:text-sm">
+                        </div>
                     </div>
-                    <div>
-                        <label for="fixativeQtyPurchased" class="block text-sm font-medium text-gray-700">Fixative Quantity Purchased (ml):</label>
-                        <input type="number" id="fixativeQtyPurchased" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="100">
-                        <label for="fixativeCost" class="block text-sm font-medium text-gray-700 mt-2">Fixative Cost ($):</label>
-                        <input type="number" id="fixativeCost" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="20">
-                    </div>
-                    <div>
-                        <label for="alcoholQtyPurchased" class="block text-sm font-medium text-gray-700">Alcohol Base Quantity Purchased (ml):</label>
-                        <input type="number" id="alcoholQtyPurchased" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="1000">
-                        <label for="alcoholCost" class="block text-sm font-medium text-gray-700 mt-2">Alcohol Base Cost ($):</label>
-                        <input type="number" id="alcoholCost" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="50">
+                    <div class="space-y-4 p-4 bg-gray-50 rounded-lg">
+                         <h3 class="font-medium text-gray-600">Perfume Oil</h3>
+                        <div>
+                            <label for="oil-quantity" class="block text-sm font-medium text-gray-600">Total Quantity (ml)</label>
+                            <input type="number" id="oil-quantity" placeholder="e.g., 500" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 sm:text-sm">
+                        </div>
+                        <div>
+                            <label for="oil-price" class="block text-sm font-medium text-gray-600">Total Price ($)</label>
+                            <input type="number" id="oil-price" placeholder="e.g., 200.00" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 sm:text-sm">
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div>
-                <h2 class="text-xl font-semibold mb-4 text-gray-700">Bottle & Desired Output</h2>
-                <div class="space-y-4">
+                <h2 class="text-xl font-semibold mb-4 text-gray-700 border-b pb-2">Step 2: Final Product</h2>
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
                     <div>
-                        <label for="bottleQtyPurchased" class="block text-sm font-medium text-gray-700">Total Bottle Quantity Purchased (units):</label>
-                        <input type="number" id="bottleQtyPurchased" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="20">
-                        <label for="bottleCost" class="block text-sm font-medium text-gray-700 mt-2">Total Bottle Cost ($):</label>
-                        <input type="number" id="bottleCost" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="30">
+                        <label for="final-quantity" class="block text-sm font-medium text-gray-600">Single Bottle Volume (ml)</label>
+                        <input type="number" id="final-quantity" placeholder="e.g., 50" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 sm:text-sm">
                     </div>
-                    <div>
-                        <label for="desiredFinalQty" class="block text-sm font-medium text-gray-700">Desired Final Perfume Quantity (ml):</label>
-                        <input type="number" id="desiredFinalQty" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" value="50">
+                     <div>
+                        <label for="bottle-cost" class="block text-sm font-medium text-gray-600">Cost per Empty Bottle ($)</label>
+                        <input type="number" id="bottle-cost" placeholder="e.g., 5.00" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 sm:text-sm">
                     </div>
                 </div>
             </div>
         </div>
 
-        <button onclick="calculateCost()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-            Calculate Cost Per Bottle
-        </button>
-
-        <div id="results" class="mt-8 p-6 bg-blue-50 border border-blue-200 rounded-lg hidden">
-            <h2 class="text-xl font-semibold mb-3 text-blue-800">Calculation Results</h2>
-            <p class="text-lg text-blue-700">Cost per ml of Perfume Oil: <span id="unitOilCost" class="font-medium"></span></p>
-            <p class="text-lg text-blue-700">Cost per ml of Fixative: <span id="unitFixativeCost" class="font-medium"></span></p>
-            <p class="text-lg text-blue-700">Cost per ml of Alcohol Base: <span id="unitAlcoholCost" class="font-medium"></span></p>
-            <p class="text-lg text-blue-700">Cost per Empty Bottle: <span id="unitBottleCost" class="font-medium"></span></p>
-            <hr class="my-4 border-blue-200">
-            <p class="text-lg text-blue-700">Perfume Oil needed per bottle: <span id="oilNeeded" class="font-medium"></span></p>
-            <p class="text-lg text-blue-700">Fixative needed per bottle: <span id="fixativeNeeded" class="font-medium"></span></p>
-            <p class="text-lg text-blue-700">Alcohol Base needed per bottle: <span id="alcoholNeeded" class="font-medium"></span></p>
-            <hr class="my-4 border-blue-200">
-            <p class="text-lg text-blue-700">Cost of Perfume Oil per bottle: <span id="oilCostPerBottle" class="font-medium"></span></p>
-            <p class="text-lg text-blue-700">Cost of Fixative per bottle: <span id="fixativeCostPerBottle" class="font-medium"></span></p>
-            <p class="text-lg text-blue-700">Cost of Alcohol Base per bottle: <span id="alcoholCostPerBottle" class="font-medium"></span></p>
-            <hr class="my-4 border-blue-200">
-            <p class="text-2xl font-bold text-blue-900">Total Cost Per Filled Bottle: <span id="totalCostPerBottle"></span></p>
+        <div class="mt-8">
+            <button id="calculate-btn" class="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform transform hover:scale-105 ease-in-out duration-200">
+                Calculate
+            </button>
         </div>
 
-        <div id="error" class="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg hidden" role="alert">
-            Please fill in all fields with valid positive numbers.
+        <div id="result-container" class="mt-6 hidden">
+             <div id="result-area" class="p-5 bg-indigo-50 rounded-lg border border-indigo-200">
+                 <h3 class="text-xl font-bold text-center mb-4 text-indigo-800">Results</h3>
+                 <div id="cost-result" class="text-center text-3xl font-extrabold text-gray-800"></div>
+                 <div id="yield-result" class="text-center text-lg font-medium text-indigo-700 mt-2"></div>
+             </div>
+
+             <div id="calculation-breakdown" class="mt-4 p-5 bg-gray-50 rounded-lg border">
+                  <h3 class="text-lg font-semibold text-center mb-3 text-gray-700">Calculation Breakdown</h3>
+                  <div class="space-y-3 text-sm text-gray-600">
+                      <div id="cost-formula"></div>
+                      <div id="yield-formula"></div>
+                  </div>
+             </div>
         </div>
+
+         <div id="error-message" class="mt-4 text-center text-red-600 font-medium"></div>
+
     </div>
 
     <script>
-        function calculateCost() {
-            // Get input values
-            const oilQtyPurchased = parseFloat(document.getElementById('oilQtyPurchased').value);
-            const oilCost = parseFloat(document.getElementById('oilCost').value);
-            const fixativeQtyPurchased = parseFloat(document.getElementById('fixativeQtyPurchased').value);
-            const fixativeCost = parseFloat(document.getElementById('fixativeCost').value);
-            const alcoholQtyPurchased = parseFloat(document.getElementById('alcoholQtyPurchased').value);
-            const alcoholCost = parseFloat(document.getElementById('alcoholCost').value);
-            const bottleQtyPurchased = parseFloat(document.getElementById('bottleQtyPurchased').value);
-            const bottleCost = parseFloat(document.getElementById('bottleCost').value);
-            const desiredFinalQty = parseFloat(document.getElementById('desiredFinalQty').value);
+        document.getElementById('calculate-btn').addEventListener('click', function() {
+            // --- Get Input Values ---
+            const baseQuantity = parseFloat(document.getElementById('base-quantity').value);
+            const basePrice = parseFloat(document.getElementById('base-price').value);
+            const oilQuantity = parseFloat(document.getElementById('oil-quantity').value);
+            const oilPrice = parseFloat(document.getElementById('oil-price').value);
+            const finalQuantity = parseFloat(document.getElementById('final-quantity').value);
+            const bottleCost = parseFloat(document.getElementById('bottle-cost').value);
 
-            // Validate inputs
-            if (isNaN(oilQtyPurchased) || isNaN(oilCost) || isNaN(fixativeQtyPurchased) || isNaN(fixativeCost) ||
-                isNaN(alcoholQtyPurchased) || isNaN(alcoholCost) || isNaN(bottleQtyPurchased) || isNaN(bottleCost) ||
-                isNaN(desiredFinalQty) ||
-                oilQtyPurchased <= 0 || oilCost < 0 || fixativeQtyPurchased <= 0 || fixativeCost < 0 ||
-                alcoholQtyPurchased <= 0 || alcoholCost < 0 || bottleQtyPurchased <= 0 || bottleCost < 0 ||
-                desiredFinalQty <= 0) {
-                document.getElementById('error').classList.remove('hidden');
-                document.getElementById('results').classList.add('hidden');
+            // --- Get DOM Elements ---
+            const resultContainer = document.getElementById('result-container');
+            const costResultEl = document.getElementById('cost-result');
+            const yieldResultEl = document.getElementById('yield-result');
+            const errorEl = document.getElementById('error-message');
+            const costFormulaEl = document.getElementById('cost-formula');
+            const yieldFormulaEl = document.getElementById('yield-formula');
+
+            // --- Clear previous results and errors ---
+            resultContainer.classList.add('hidden');
+            errorEl.innerText = '';
+
+            // --- Validate Inputs ---
+            if (isNaN(baseQuantity) || isNaN(basePrice) || isNaN(oilQuantity) || isNaN(oilPrice) || isNaN(finalQuantity) || isNaN(bottleCost) || finalQuantity <= 0) {
+                errorEl.innerText = 'Please fill in all fields with valid, positive numbers.';
                 return;
-            } else {
-                document.getElementById('error').classList.add('hidden');
             }
 
-            // Define ratios
-            const perfumeOilRatio = 0.38; // 38%
-            const fixativeRatio = 0.02;   // 2%
-            const alcoholBaseRatio = 0.60; // 60%
+            // --- ===== COST CALCULATION ===== ---
+            const baseCostPerMl = basePrice / baseQuantity;
+            const oilCostPerMl = oilPrice / oilQuantity;
+            const baseAmountInFinal = finalQuantity * 0.60;
+            const oilAmountInFinal = finalQuantity * 0.40;
+            const liquidCost = (baseAmountInFinal * baseCostPerMl) + (oilAmountInFinal * oilCostPerMl);
+            const totalCost = liquidCost + bottleCost;
 
-            // Step 1: Calculate the Unit Cost of Each Raw Ingredient
-            const unitOilCost = oilCost / oilQtyPurchased;
-            const unitFixativeCost = fixativeCost / fixativeQtyPurchased;
-            const unitAlcoholCost = alcoholCost / alcoholQtyPurchased;
-            const unitBottleCost = bottleCost / bottleQtyPurchased;
+            // --- ===== PRODUCTION YIELD CALCULATION ===== ---
+            const maxBottlesFromBase = baseQuantity / baseAmountInFinal;
+            const maxBottlesFromOil = oilQuantity / oilAmountInFinal;
+            const totalBottlesProducible = Math.floor(Math.min(maxBottlesFromBase, maxBottlesFromOil));
 
-            // Step 2: Calculate the Quantity of Each Ingredient Needed for ONE Desired Final Perfume Bottle
-            const oilNeeded = desiredFinalQty * perfumeOilRatio;
-            const fixativeNeeded = desiredFinalQty * fixativeRatio;
-            const alcoholNeeded = desiredFinalQty * alcoholBaseRatio;
+            // --- Display the Results ---
+            if (totalCost >= 0 && totalBottlesProducible >= 0) {
+                 costResultEl.innerText = `$${totalCost.toFixed(2)} / bottle`;
+                 yieldResultEl.innerText = `You can produce ${totalBottlesProducible} bottles`;
 
-            // Step 3: Calculate the Raw Material Cost for ONE Desired Final Perfume Bottle
-            const oilCostPerBottle = oilNeeded * unitOilCost;
-            const fixativeCostPerBottle = fixativeNeeded * unitFixativeCost;
-            const alcoholCostPerBottle = alcoholNeeded * unitAlcoholCost;
+                 // --- Populate and Display Formulas ---
+                 costFormulaEl.innerHTML = `
+                    <p><strong>Cost Per Bottle Formula:</strong> (Liquid Cost) + (Bottle Cost)</p>
+                    <ul class="list-disc list-inside ml-4 mt-1">
+                        <li>Base Cost: (${finalQuantity}ml * 60%) * ($${basePrice} / ${baseQuantity}ml) = $${(baseAmountInFinal * baseCostPerMl).toFixed(2)}</li>
+                        <li>Oil Cost: (${finalQuantity}ml * 40%) * ($${oilPrice} / ${oilQuantity}ml) = $${(oilAmountInFinal * oilCostPerMl).toFixed(2)}</li>
+                        <li>Liquid Cost Total: $${(liquidCost).toFixed(2)}</li>
+                        <li><strong>Final Cost: $${(liquidCost).toFixed(2)} + $${bottleCost.toFixed(2)} (bottle) = $${totalCost.toFixed(2)}</strong></li>
+                    </ul>`;
 
-            // Step 4: Calculate the Total Cost Per Filled Bottle
-            const totalCostPerBottle = oilCostPerBottle + fixativeCostPerBottle + alcoholCostPerBottle + unitBottleCost;
+                 yieldFormulaEl.innerHTML = `
+                    <p class="mt-2"><strong>Producible Bottles Formula:</strong> The LOWER of the two values below:</p>
+                     <ul class="list-disc list-inside ml-4 mt-1">
+                        <li>From Base: ${baseQuantity}ml / (${finalQuantity}ml * 60%) = ${maxBottlesFromBase.toFixed(1)} bottles</li>
+                        <li>From Oil: ${oilQuantity}ml / (${finalQuantity}ml * 40%) = ${maxBottlesFromOil.toFixed(1)} bottles</li>
+                        <li><strong>Result: ${totalBottlesProducible} (rounded down)</li>
+                    </ul>`;
 
-            // Display results
-            document.getElementById('unitOilCost').textContent = `$${unitOilCost.toFixed(4)}`;
-            document.getElementById('unitFixativeCost').textContent = `$${unitFixativeCost.toFixed(4)}`;
-            document.getElementById('unitAlcoholCost').textContent = `$${unitAlcoholCost.toFixed(4)}`;
-            document.getElementById('unitBottleCost').textContent = `$${unitBottleCost.toFixed(2)}`;
+                 resultContainer.classList.remove('hidden');
+                 resultContainer.classList.add('fade-in');
 
-            document.getElementById('oilNeeded').textContent = `${oilNeeded.toFixed(2)} ml`;
-            document.getElementById('fixativeNeeded').textContent = `${fixativeNeeded.toFixed(2)} ml`;
-            document.getElementById('alcoholNeeded').textContent = `${alcoholNeeded.toFixed(2)} ml`;
-
-            document.getElementById('oilCostPerBottle').textContent = `$${oilCostPerBottle.toFixed(2)}`;
-            document.getElementById('fixativeCostPerBottle').textContent = `$${fixativeCostPerBottle.toFixed(2)}`;
-            document.getElementById('alcoholCostPerBottle').textContent = `$${alcoholCostPerBottle.toFixed(2)}`;
-
-            document.getElementById('totalCostPerBottle').textContent = `$${totalCostPerBottle.toFixed(2)}`;
-
-            document.getElementById('results').classList.remove('hidden');
-        }
+            } else {
+                 errorEl.innerText = 'Invalid calculation. Please check your input values.';
+            }
+        });
     </script>
 </body>
 </html>
